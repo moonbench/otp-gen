@@ -6,7 +6,7 @@ use std::fs;
 use std::fs::{File};
 use std::io::{Write};
 
-const SHEET_DIR: &str = "sheets";
+const PAD_DIR: &str = "pads";
 
 fn title() -> String {
     let mut title = String::from(env!("CARGO_PKG_NAME"));
@@ -17,23 +17,23 @@ fn title() -> String {
 
 fn usage() {
     println!("{}", title());
-    println!("Usage: {} <number of sheets> <size in bytes>", env!("CARGO_PKG_NAME"));
+    println!("Usage: {} <number of pads> <size in bytes>", env!("CARGO_PKG_NAME"));
 }
 
-fn generate_sheets(sheet_count: &str, sheet_size: &str) {
-    let sheet_count: i32 = sheet_count.parse().expect("[ ERROR ] Invalid number of sheets");
-    let sheet_size: i32 = sheet_size.parse().expect("[ ERROR ] Invalid sheet size");
-    fs::create_dir_all(SHEET_DIR).expect(&format!("[ ERROR ] Unable to make directory {}", SHEET_DIR).to_string());
+fn generate_pads(pad_count: &str, pad_size: &str) {
+    let pad_count: i32 = pad_count.parse().expect("[ ERROR ] Invalid number of pads");
+    let pad_size: i32 = pad_size.parse().expect("[ ERROR ] Invalid pad size");
+    fs::create_dir_all(PAD_DIR).expect(&format!("[ ERROR ] Unable to make directory {}", PAD_DIR).to_string());
 
-    println!("[ INFO ] Generating {} sheets with {} bytes each", sheet_count, sheet_size);
+    println!("[ INFO ] Generating {} pads with {} bytes each", pad_count, pad_size);
 
-    for sheet_number in 0..sheet_count {
-        generate_sheet(sheet_number, sheet_size);
+    for pad_number in 0..pad_count {
+        generate_pad(pad_number, pad_size);
     }
 }
 
-fn generate_sheet(sheet_id: i32, size: i32) {
-    println!("[ INFO ] Generating sheet {}", sheet_id);
+fn generate_pad(pad_id: i32, size: i32) {
+    println!("[ INFO ] Generating pad {}", pad_id);
 
     let mut rng = thread_rng();
     let mut bytes: Vec<u8> = Vec::new();
@@ -41,7 +41,7 @@ fn generate_sheet(sheet_id: i32, size: i32) {
         bytes.push(rng.gen());
     }
 
-    let output_path = format!("{}/sheet{}.pad", SHEET_DIR, sheet_id).to_string();
+    let output_path = format!("{}/pad{}.pad", PAD_DIR, pad_id).to_string();
     let mut file = File::create(&output_path).expect("[ ERROR ] Failed to create file");
     file.write_all(&bytes).expect("[ ERROR ] Failed to write to file");
 }
@@ -49,7 +49,7 @@ fn generate_sheet(sheet_id: i32, size: i32) {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     match args.len() {
-        3 => generate_sheets(&args[1], &args[2]),
+        3 => generate_pads(&args[1], &args[2]),
         _ => usage()
     }
 }
