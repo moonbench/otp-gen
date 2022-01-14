@@ -5,8 +5,6 @@ edition = "2021"
 description = "One-time pad generator"
 license = "GPL-3.0-only"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 rand = "0.7.3"
 termprogress = "0.3.4"
