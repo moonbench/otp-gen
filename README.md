@@ -11,7 +11,26 @@ Generates an arbitrary number of pads in with an specified number of random byte
  * Run `cargo build --release`
 
 ## Usage
-```Usage: otpgen <number of sheets> <size in bytes>```
+```
+USAGE:
+    otpgen [OPTIONS] --size <size>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -n, --number <number>    The number of pads to generate [default: 1]
+    -s, --size <size>        The size of the pads (in bytes)
+
+```
+
+### Generating a 1MB pad
+```
+./target/release/otpgen -s 1000000
+```
 
 ### Generating 10 pads, 1MB each
-```./target/release/otpgen 10 1000000```
+```
+./target/release/otpgen -n 10 -s 1000000
+```
