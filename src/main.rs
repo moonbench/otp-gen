@@ -13,10 +13,10 @@ const PAD_DIR: &str = "pads";
 fn generate_pads(pad_count: &str, pad_size: &str) {
     let pad_count: i32 = pad_count.parse().expect("Invalid number of pads");
     let pad_size: i32 = pad_size.parse().expect("Invalid pad size");
-    fs::create_dir_all(PAD_DIR).expect(&format!("Unable to make directory {}", PAD_DIR).to_string());
+
+    create_pad_directory();
 
     println!("Generating {} one-time pads with {} bytes each", pad_count, pad_size);
-
     for pad_number in 0..pad_count {
         generate_pad(pad_number, pad_size);
     }
@@ -31,17 +31,25 @@ fn generate_pad(pad_id: i32, size: i32) {
     for i in 0..size {
         bytes.push(rng.gen());
         if i % 1000 == 0 {
+            // Periodically update the status bar
             progress.set_progress(i as f64/size as f64);
         }
     }
 
+    write_bytes_to_file(bytes, pad_id);
     progress.set_progress(1.0);
     progress.set_title(&format!("Generated pad {}.", pad_id).to_string());
+    progress.complete();
+}
 
+fn create_pad_directory() {
+    fs::create_dir_all(PAD_DIR).expect(&format!("Unable to make directory {}", PAD_DIR).to_string());
+}
+
+fn write_bytes_to_file(bytes: Vec<u8>, pad_id: i32) {
     let output_path = format!("{}/pad{}.pad", PAD_DIR, pad_id).to_string();
     let mut file = File::create(&output_path).expect("Failed to create file");
     file.write_all(&bytes).expect("Failed to write to file");
-    progress.complete();
 }
 
 fn main() {
