@@ -24,7 +24,7 @@ fn generate_pads(pad_count: &str, pad_size: &str) {
 
 fn generate_pad(pad_id: i32, size: i32) {
     let mut progress = Bar::default();
-    progress.set_title(&format!("Generating pad {}...", pad_id).to_string());
+    progress.set_title(&format!("Generating {}/{}.pad ...", PAD_DIR, pad_id).to_string());
 
     let mut rng = thread_rng();
     let mut bytes: Vec<u8> = Vec::new();
@@ -38,7 +38,7 @@ fn generate_pad(pad_id: i32, size: i32) {
 
     write_bytes_to_file(bytes, pad_id);
     progress.set_progress(1.0);
-    progress.set_title(&format!("Generated pad {}.", pad_id).to_string());
+    progress.set_title(&format!("Generated {}/{}.pad", PAD_DIR, pad_id).to_string());
     progress.complete();
 }
 
@@ -47,7 +47,7 @@ fn create_pad_directory() {
 }
 
 fn write_bytes_to_file(bytes: Vec<u8>, pad_id: i32) {
-    let output_path = format!("{}/pad{}.pad", PAD_DIR, pad_id).to_string();
+    let output_path = format!("{}/{}.pad", PAD_DIR, pad_id).to_string();
     let mut file = File::create(&output_path).expect("Failed to create file");
     file.write_all(&bytes).expect("Failed to write to file");
 }
